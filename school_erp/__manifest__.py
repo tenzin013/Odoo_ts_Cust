@@ -14,7 +14,12 @@ Features:
 - Student ID card generation and print management
 - Batch ID card printing with QR/barcode
     """,
-    'author': 'EduERP',
+    'author': 'Tshering Sherpa',
+    'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
+    'maintainer': 'Tshering Sherpa',
+    'support': 'tsherings8981@gmail.com',
+    'price':'10.00',
+    'currency':'USD',
     'license': 'LGPL-3',
     'depends': [
         'base',
