@@ -14,7 +14,7 @@ Features:
 - Student ID card generation and print management
 - Batch ID card printing with QR/barcode
     """,
-    'author': 'EduERP',
+    
     'license': 'LGPL-3',
     'depends': [
         'base',
