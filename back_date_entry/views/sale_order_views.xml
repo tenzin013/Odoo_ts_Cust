@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  Sale Order — Form View Inherit                              -->
+    <!-- ============================================================ -->
+    <record id="view_sale_order_form_back_date" model="ir.ui.view">
+        <field name="name">sale.order.form.back_date</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insert Back Date group after the status bar -->
+            <xpath expr="//sheet//group[1]" position="before">
+                <group string="Back Date Entry"
+                       invisible="back_date == False and back_date_applied == False"
+                       class="o_back_date_group">
+                    <field name="back_date" widget="date"/>
+                    <field name="back_date_applied" readonly="1"/>
+                </group>
+            </xpath>
+
+            <!-- Button in header -->
+            <xpath expr="//header/button[last()]" position="after">
+                <button name="action_apply_back_date"
+                        string="Apply Back Date"
+                        type="object"
+                        class="btn-warning"
+                        invisible="back_date == False"
+                        confirm="This will update all related dates on this sale order,
+                                  linked deliveries and draft invoices. Continue?"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  Sale Order — Tree/List View Inherit                         -->
+    <!-- ============================================================ -->
+    <record id="view_sale_order_tree_back_date" model="ir.ui.view">
+        <field name="name">sale.order.tree.back_date</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="back_date" optional="show" string="Back Date"/>
+                <field name="back_date_applied" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  Server action binding for Sale Order list                   -->
+    <!-- ============================================================ -->
+    <record id="action_sale_order_back_date_wizard" model="ir.actions.server">
+        <field name="name">Apply Back Date</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+action = env['back.date.wizard'].with_context(
+    active_model='sale.order',
+    active_ids=records.ids,
+).action_open_wizard()
+        </field>
+    </record>
+
+</odoo>

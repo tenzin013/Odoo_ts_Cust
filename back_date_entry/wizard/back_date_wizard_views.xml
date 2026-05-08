@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  Back Date Wizard — Form View                                -->
+    <!-- ============================================================ -->
+    <record id="view_back_date_wizard_form" model="ir.ui.view">
+        <field name="name">back.date.wizard.form</field>
+        <field name="model">back.date.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Apply Back Date">
+                <sheet>
+                    <group>
+                        <group string="Back Date Configuration">
+                            <field name="back_date" widget="date"/>
+                            <field name="apply_to_related"/>
+                        </group>
+                        <group string="Scope">
+                            <field name="model_name" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Reason (Optional)">
+                        <field name="note" nolabel="1"
+                               placeholder="Enter reason for back-dating this entry…"/>
+                    </group>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Warning:</strong>
+                        Applying a back date will update the order date, accounting date,
+                        scheduled dates and effective transfer dates on all selected records
+                        and their linked documents. Posted journal entries must be reset to
+                        draft before the date can be changed.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_apply" string="Apply Back Date"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  Generic server action — opens wizard from any tree view     -->
+    <!-- ============================================================ -->
+    <record id="action_back_date_wizard" model="ir.actions.act_window">
+        <field name="name">Apply Back Date</field>
+        <field name="res_model">back.date.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_back_date_wizard_form"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+</odoo>
