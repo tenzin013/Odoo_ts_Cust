@@ -28,7 +28,9 @@ Features
     'author': 'Tshering Sherpa',
     'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
     'maintainer': 'Tshering Sherpa',
-    'support': 'Tsherings8981@gmail.com',
+    'support': 'tsherings8981@gmail.com',
+    'price':'10.00',
+    'currency':'USD',
     'license': 'LGPL-3',
     'depends': [
         'sale_management',
