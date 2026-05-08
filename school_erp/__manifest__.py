@@ -22,6 +22,12 @@ Features:
         'contacts',
         'web',
     ],
+    'author': 'Tshering Sherpa',
+    'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
+    'maintainer': 'Tshering Sherpa',
+    'support': 'tsherings8981@gmail.com',
+    'price':'10.00',
+    'currency':'USD',
     'data': [
         'security/school_security.xml',
         'security/ir.model.access.csv',
