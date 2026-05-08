@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ── Root menu ───────────────────────────────────────────── -->
+        <menuitem id="menu_school_root"
+                  name="School ERP"
+                  sequence="50"
+                  web_icon="school_erp,static/description/icon.png"
+                  groups="school_erp.group_school_user"/>
+
+        <!-- ── Students ─────────────────────────────────────────────── -->
+        <menuitem id="menu_school_students"
+                  name="Students"
+                  parent="menu_school_root"
+                  sequence="10"
+                  groups="school_erp.group_school_user"/>
+
+        <menuitem id="menu_school_student_list"
+                  name="All Students"
+                  parent="menu_school_students"
+                  action="action_school_student"
+                  sequence="10"/>
+
+        <!-- ── Classes ───────────────────────────────────────────────── -->
+        <menuitem id="menu_school_classes"
+                  name="Classes"
+                  parent="menu_school_root"
+                  sequence="20"
+                  groups="school_erp.group_school_teacher"/>
+
+        <menuitem id="menu_school_grade_list"
+                  name="Grades"
+                  parent="menu_school_classes"
+                  action="action_school_grade"
+                  sequence="10"
+                  groups="school_erp.group_school_manager"/>
+
+        <menuitem id="menu_school_class_list"
+                  name="Classes &amp; Sections"
+                  parent="menu_school_classes"
+                  action="action_school_class"
+                  sequence="20"/>
+
+        <!-- ── Timetable ─────────────────────────────────────────────── -->
+        <menuitem id="menu_school_timetable"
+                  name="Timetable"
+                  parent="menu_school_root"
+                  sequence="30"
+                  groups="school_erp.group_school_teacher"/>
+
+        <menuitem id="menu_school_timetable_list"
+                  name="Weekly Timetable"
+                  parent="menu_school_timetable"
+                  action="action_school_timetable"
+                  sequence="10"/>
+
+        <menuitem id="menu_school_period_group"
+                  name="Period Groups"
+                  parent="menu_school_timetable"
+                  action="action_school_period_group"
+                  sequence="20"
+                  groups="school_erp.group_school_manager"/>
+
+        <menuitem id="menu_school_subject"
+                  name="Subjects"
+                  parent="menu_school_timetable"
+                  action="action_school_subject"
+                  sequence="30"
+                  groups="school_erp.group_school_manager"/>
+
+        <!-- ── ID Cards ──────────────────────────────────────────────── -->
+        <menuitem id="menu_school_idcards"
+                  name="ID Cards"
+                  parent="menu_school_root"
+                  sequence="40"
+                  groups="school_erp.group_school_teacher"/>
+
+        <menuitem id="menu_school_idcard_all"
+                  name="All ID Cards"
+                  parent="menu_school_idcards"
+                  action="action_school_idcard"
+                  sequence="10"/>
+
+        <menuitem id="menu_school_idcard_queue"
+                  name="Print Queue"
+                  parent="menu_school_idcards"
+                  action="action_school_idcard_print_queue"
+                  sequence="20"/>
+
+    </data>
+</odoo>

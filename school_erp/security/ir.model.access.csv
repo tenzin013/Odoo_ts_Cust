@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_grade_user,school.grade user,model_school_grade,group_school_user,1,0,0,0
+access_school_grade_manager,school.grade manager,model_school_grade,group_school_manager,1,1,1,1
+access_school_class_user,school.class user,model_school_class,group_school_user,1,0,0,0
+access_school_class_teacher,school.class teacher,model_school_class,group_school_teacher,1,1,0,0
+access_school_class_manager,school.class manager,model_school_class,group_school_manager,1,1,1,1
+access_school_subject_user,school.subject user,model_school_subject,group_school_user,1,0,0,0
+access_school_subject_manager,school.subject manager,model_school_subject,group_school_manager,1,1,1,1
+access_school_period_group_user,school.period.group user,model_school_period_group,group_school_user,1,0,0,0
+access_school_period_group_manager,school.period.group manager,model_school_period_group,group_school_manager,1,1,1,1
+access_school_period_user,school.period user,model_school_period,group_school_user,1,0,0,0
+access_school_period_manager,school.period manager,model_school_period,group_school_manager,1,1,1,1
+access_school_timetable_user,school.timetable user,model_school_timetable,group_school_user,1,0,0,0
+access_school_timetable_teacher,school.timetable teacher,model_school_timetable,group_school_teacher,1,1,0,0
+access_school_timetable_manager,school.timetable manager,model_school_timetable,group_school_manager,1,1,1,1
+access_school_student_user,school.student user,model_school_student,group_school_user,1,0,0,0
+access_school_student_teacher,school.student teacher,model_school_student,group_school_teacher,1,1,0,0
+access_school_student_manager,school.student manager,model_school_student,group_school_manager,1,1,1,1
+access_school_idcard_user,school.idcard user,model_school_idcard,group_school_user,1,0,0,0
+access_school_idcard_teacher,school.idcard teacher,model_school_idcard,group_school_teacher,1,1,0,0
+access_school_idcard_manager,school.idcard manager,model_school_idcard,group_school_manager,1,1,1,1

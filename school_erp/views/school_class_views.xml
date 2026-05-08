@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Grade list -->
+        <record id="view_school_grade_list" model="ir.ui.view">
+            <field name="name">school.grade.list</field>
+            <field name="model">school.grade</field>
+            <field name="arch" type="xml">
+                <list string="Grades" editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="class_count" string="Classes"/>
+                    <field name="active" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_school_grade" model="ir.actions.act_window">
+            <field name="name">Grades</field>
+            <field name="res_model">school.grade</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Class list -->
+        <record id="view_school_class_list" model="ir.ui.view">
+            <field name="name">school.class.list</field>
+            <field name="model">school.class</field>
+            <field name="arch" type="xml">
+                <list string="Classes">
+                    <field name="display_name" string="Class"/>
+                    <field name="grade_id"/>
+                    <field name="section"/>
+                    <field name="academic_year"/>
+                    <field name="class_teacher_id" optional="show"/>
+                    <field name="room" optional="show"/>
+                    <field name="capacity" optional="show"/>
+                    <field name="student_count" string="Students"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Class form -->
+        <record id="view_school_class_form" model="ir.ui.view">
+            <field name="name">school.class.form</field>
+            <field name="model">school.class</field>
+            <field name="arch" type="xml">
+                <form string="Class">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_school_student)d" type="action"
+                                    class="oe_stat_button" icon="fa-users"
+                                    context="{'default_class_id': active_id,
+                                              'search_default_class_id': active_id}">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="display_name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Class Details">
+                                <field name="grade_id"/>
+                                <field name="section"/>
+                                <field name="academic_year"/>
+                                <field name="color" widget="color_picker"/>
+                            </group>
+                            <group string="Administration">
+                                <field name="class_teacher_id"/>
+                                <field name="room"/>
+                                <field name="capacity"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Timetable" name="timetable">
+                                <field name="timetable_ids">
+                                    <list editable="bottom">
+                                        <field name="day_of_week"/>
+                                        <field name="period_id"/>
+                                        <field name="time_start_display" readonly="1"/>
+                                        <field name="time_end_display" readonly="1"/>
+                                        <field name="subject_id"/>
+                                        <field name="teacher_id"/>
+                                        <field name="room"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_school_class" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="res_model">school.class</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>
