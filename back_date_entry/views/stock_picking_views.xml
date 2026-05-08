@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  Stock Picking — Form View Inherit                           -->
+    <!-- ============================================================ -->
+    <record id="view_stock_picking_form_back_date" model="ir.ui.view">
+        <field name="name">stock.picking.form.back_date</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet//group[1]" position="before">
+                <group string="Back Date Entry"
+                       invisible="back_date == False and back_date_applied == False">
+                    <field name="back_date" widget="date"/>
+                    <field name="back_date_applied" readonly="1"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//header/button[last()]" position="after">
+                <button name="action_apply_back_date"
+                        string="Apply Back Date"
+                        type="object"
+                        class="btn-warning"
+                        invisible="back_date == False or state == 'cancel'"
+                        confirm="This will update the scheduled date and all move dates
+                                  on this transfer. Continue?"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  Stock Picking — Tree View Inherit                           -->
+    <!-- ============================================================ -->
+    <record id="view_stock_picking_tree_back_date" model="ir.ui.view">
+        <field name="name">stock.picking.tree.back_date</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="back_date" optional="show" string="Back Date"/>
+                <field name="back_date_applied" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  Server action binding for Stock Picking list                -->
+    <!-- ============================================================ -->
+    <record id="action_stock_picking_back_date_wizard" model="ir.actions.server">
+        <field name="name">Apply Back Date</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+action = env['back.date.wizard'].with_context(
+    active_model='stock.picking',
+    active_ids=records.ids,
+).action_open_wizard()
+        </field>
+    </record>
+
+</odoo>
