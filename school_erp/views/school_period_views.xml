@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Subject list -->
+        <record id="view_school_subject_list" model="ir.ui.view">
+            <field name="name">school.subject.list</field>
+            <field name="model">school.subject</field>
+            <field name="arch" type="xml">
+                <list string="Subjects" editable="bottom">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="subject_type"/>
+                    <field name="active" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_school_subject" model="ir.actions.act_window">
+            <field name="name">Subjects</field>
+            <field name="res_model">school.subject</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Period Group list -->
+        <record id="view_school_period_group_list" model="ir.ui.view">
+            <field name="name">school.period.group.list</field>
+            <field name="model">school.period.group</field>
+            <field name="arch" type="xml">
+                <list string="Period Groups">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="period_count" string="Periods"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Period Group form -->
+        <record id="view_school_period_group_form" model="ir.ui.view">
+            <field name="name">school.period.group.form</field>
+            <field name="model">school.period.group</field>
+            <field name="arch" type="xml">
+                <form string="Period Group">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <field name="code"/>
+                            <field name="description"/>
+                        </group>
+                        <field name="period_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="period_type"/>
+                                <field name="time_start"/>
+                                <field name="time_end"/>
+                                <field name="time_start_display" readonly="1" string="Start"/>
+                                <field name="time_end_display" readonly="1" string="End"/>
+                                <field name="duration" readonly="1" string="Min"/>
+                            </list>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_school_period_group" model="ir.actions.act_window">
+            <field name="name">Period Groups</field>
+            <field name="res_model">school.period.group</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

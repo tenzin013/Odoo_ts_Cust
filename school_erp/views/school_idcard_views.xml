@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ID Card list -->
+        <record id="view_school_idcard_list" model="ir.ui.view">
+            <field name="name">school.idcard.list</field>
+            <field name="model">school.idcard</field>
+            <field name="arch" type="xml">
+                <list string="ID Cards"
+                      decoration-warning="state=='pending'"
+                      decoration-success="state=='active'"
+                      decoration-muted="state in ('cancelled','expired')">
+                    <field name="card_number"/>
+                    <field name="student_id"/>
+                    <field name="class_id" optional="show"/>
+                    <field name="roll_number" optional="show"/>
+                    <field name="academic_year"/>
+                    <field name="issue_date"/>
+                    <field name="valid_till" optional="show"/>
+                    <field name="print_date" optional="show"/>
+                    <field name="issue_count" optional="show"/>
+                    <field name="state" widget="badge"
+                           decoration-success="state=='active'"
+                           decoration-warning="state=='pending'"
+                           decoration-info="state=='printed'"
+                           decoration-danger="state in ('lost','cancelled')"/>
+                    <button name="action_mark_printed" type="object" string="Mark Printed"
+                            icon="fa-check" invisible="state != 'pending'"
+                            groups="school_erp.group_school_teacher"/>
+                    <button name="action_print_report" type="object" string="Print" icon="fa-print"
+                            groups="school_erp.group_school_teacher"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ID Card form -->
+        <record id="view_school_idcard_form" model="ir.ui.view">
+            <field name="name">school.idcard.form</field>
+            <field name="model">school.idcard</field>
+            <field name="arch" type="xml">
+                <form string="Student ID Card">
+                    <header>
+                        <button name="action_mark_printed" string="Mark as Printed" type="object"
+                                invisible="state != 'pending'" class="btn-primary"
+                                groups="school_erp.group_school_teacher"/>
+                        <button name="action_issue" string="Issue to Student" type="object"
+                                invisible="state not in ('pending','printed')" class="btn-primary"
+                                groups="school_erp.group_school_teacher"/>
+                        <button name="action_report_lost" string="Report Lost" type="object"
+                                invisible="state != 'active'"
+                                groups="school_erp.group_school_manager"/>
+                        <button name="action_reissue" string="Re-issue Card" type="object"
+                                invisible="state not in ('lost','expired')"
+                                groups="school_erp.group_school_manager"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                invisible="state in ('cancelled','expired')"
+                                groups="school_erp.group_school_manager"/>
+                        <button name="action_print_report" string="Print ID Card" type="object"
+                                icon="fa-print" class="btn-secondary"
+                                groups="school_erp.group_school_teacher"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="pending,printed,active"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="card_number" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Student">
+                                <field name="student_id"/>
+                                <field name="class_id" readonly="1"/>
+                                <field name="roll_number" readonly="1"/>
+                                <field name="period_group_id" readonly="1"/>
+                                <field name="blood_group" readonly="1"/>
+                                <field name="date_of_birth" readonly="1"/>
+                            </group>
+                            <group string="Card Details">
+                                <field name="academic_year"/>
+                                <field name="issue_date"/>
+                                <field name="valid_till" readonly="1"/>
+                                <field name="print_date" readonly="1"/>
+                                <field name="printed_by" readonly="1"/>
+                                <field name="issue_count" readonly="1"/>
+                                <field name="barcode" readonly="1" widget="barcode"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="notes" placeholder="Notes about this card..."/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ID Card search -->
+        <record id="view_school_idcard_search" model="ir.ui.view">
+            <field name="name">school.idcard.search</field>
+            <field name="model">school.idcard</field>
+            <field name="arch" type="xml">
+                <search string="Search ID Cards">
+                    <field name="card_number"/>
+                    <field name="student_id"/>
+                    <field name="class_id"/>
+                    <field name="roll_number"/>
+                    <separator/>
+                    <filter name="pending" string="Pending Print" domain="[('state','=','pending')]"/>
+                    <filter name="printed" string="Printed" domain="[('state','=','printed')]"/>
+                    <filter name="active" string="Active" domain="[('state','=','active')]"/>
+                    <filter name="lost" string="Lost" domain="[('state','=','lost')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="by_class" string="Class" context="{'group_by':'class_id'}"/>
+                        <filter name="by_state" string="Status" context="{'group_by':'state'}"/>
+                        <filter name="by_year" string="Academic Year" context="{'group_by':'academic_year'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ID Card action -->
+        <record id="action_school_idcard" model="ir.actions.act_window">
+            <field name="name">ID Cards</field>
+            <field name="res_model">school.idcard</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_school_idcard_search"/>
+            <field name="context">{'search_default_pending': 1}</field>
+        </record>
+
+        <!-- Print queue action (pending cards only) -->
+        <record id="action_school_idcard_print_queue" model="ir.actions.act_window">
+            <field name="name">Print Queue</field>
+            <field name="res_model">school.idcard</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('state', 'in', ('pending', 'printed'))]</field>
+            <field name="search_view_id" ref="view_school_idcard_search"/>
+        </record>
+
+    </data>
+</odoo>

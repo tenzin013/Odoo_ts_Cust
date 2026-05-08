@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ── List view ──────────────────────────────────────────── -->
+        <record id="view_school_student_list" model="ir.ui.view">
+            <field name="name">school.student.list</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <list string="Students" decoration-warning="state=='on_leave'"
+                      decoration-muted="state in ('transferred','alumni')">
+                    <field name="admission_number" optional="show"/>
+                    <field name="name"/>
+                    <field name="class_id" optional="show"/>
+                    <field name="roll_number" optional="show"/>
+                    <field name="period_group_id" optional="show"/>
+                    <field name="guardian_name" optional="hide"/>
+                    <field name="guardian_phone" optional="hide"/>
+                    <field name="age" optional="show"/>
+                    <field name="blood_group" optional="show"/>
+                    <field name="state" widget="badge"
+                           decoration-success="state=='active'"
+                           decoration-warning="state=='on_leave'"
+                           decoration-info="state=='draft'"/>
+                    <field name="idcard_count" string="ID Cards" optional="show"/>
+                    <button name="action_print_idcard" type="object"
+                            string="Print ID" icon="fa-id-card"
+                            groups="school_erp.group_school_teacher"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ── Form view ──────────────────────────────────────────── -->
+        <record id="view_school_student_form" model="ir.ui.view">
+            <field name="name">school.student.form</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <form string="Student">
+                    <header>
+                        <button name="action_activate" string="Activate" type="object"
+                                invisible="state != 'draft'"
+                                class="btn-primary"/>
+                        <button name="action_set_leave" string="Mark On Leave" type="object"
+                                invisible="state != 'active'"/>
+                        <button name="action_transfer" string="Transfer" type="object"
+                                invisible="state not in ('active','on_leave')"/>
+                        <button name="action_generate_idcard" string="Generate ID Card" type="object"
+                                class="btn-primary" icon="fa-id-card"
+                                groups="school_erp.group_school_manager"/>
+                        <button name="action_print_idcard" string="Print ID Card" type="object"
+                                icon="fa-print"
+                                groups="school_erp.group_school_teacher"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,active,alumni"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_idcards" type="object"
+                                    class="oe_stat_button" icon="fa-id-card">
+                                <field name="idcard_count" widget="statinfo" string="ID Cards"/>
+                            </button>
+                        </div>
+                        <field name="photo" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Full Name"/></h1>
+                            <h2><field name="admission_number" readonly="1"/></h2>
+                        </div>
+                        <group>
+                            <group string="Academic">
+                                <field name="class_id"/>
+                                <field name="roll_number"/>
+                                <field name="period_group_id"/>
+                                <field name="academic_year"/>
+                            </group>
+                            <group string="Personal">
+                                <field name="gender"/>
+                                <field name="date_of_birth"/>
+                                <field name="age" readonly="1"/>
+                                <field name="blood_group"/>
+                                <field name="nationality_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Guardian" name="guardian">
+                                <group>
+                                    <group>
+                                        <field name="guardian_name"/>
+                                        <field name="guardian_relation"/>
+                                        <field name="guardian_phone" widget="phone"/>
+                                        <field name="guardian_email" widget="email"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Address" name="address">
+                                <group>
+                                    <field name="street"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <field name="zip"/>
+                                    <field name="country_id"/>
+                                </group>
+                            </page>
+                            <page string="ID Cards" name="idcards">
+                                <field name="idcard_ids" readonly="1">
+                                    <list>
+                                        <field name="card_number"/>
+                                        <field name="academic_year"/>
+                                        <field name="issue_date"/>
+                                        <field name="valid_till"/>
+                                        <field name="state" widget="badge"
+                                               decoration-success="state=='active'"
+                                               decoration-warning="state=='pending'"
+                                               decoration-info="state=='printed'"
+                                               decoration-danger="state in ('lost','cancelled')"/>
+                                        <button name="action_print_report" type="object"
+                                                string="Print" icon="fa-print"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Notes" name="notes">
+                                <field name="notes" placeholder="Internal notes..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ── Search view ────────────────────────────────────────── -->
+        <record id="view_school_student_search" model="ir.ui.view">
+            <field name="name">school.student.search</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <search string="Search Students">
+                    <field name="name" string="Student Name"/>
+                    <field name="admission_number"/>
+                    <field name="roll_number"/>
+                    <field name="class_id"/>
+                    <field name="guardian_name"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('state','=','active')]"/>
+                    <filter name="on_leave" string="On Leave" domain="[('state','=','on_leave')]"/>
+                    <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                    <separator/>
+                    <filter name="pending_idcard" string="ID Card Pending"
+                            domain="[('idcard_ids.state','=','pending')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="by_class" string="Class" context="{'group_by':'class_id'}"/>
+                        <filter name="by_period_group" string="Period Group"
+                                context="{'group_by':'period_group_id'}"/>
+                        <filter name="by_state" string="Status" context="{'group_by':'state'}"/>
+                        <filter name="by_year" string="Academic Year"
+                                context="{'group_by':'academic_year'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ── Kanban view ────────────────────────────────────────── -->
+        <record id="view_school_student_kanban" model="ir.ui.view">
+            <field name="name">school.student.kanban</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column" default_group_by="class_id">
+                    <field name="name"/>
+                    <field name="photo"/>
+                    <field name="roll_number"/>
+                    <field name="class_id"/>
+                    <field name="state"/>
+                    <field name="blood_group"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <field name="photo" widget="image" class="o_image_40_cover float-start me-2"/>
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                    <div class="text-muted small">Roll: <field name="roll_number"/></div>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state=='active'"
+                                           decoration-warning="state=='on_leave'"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ── Action ─────────────────────────────────────────────── -->
+        <record id="action_school_student" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="res_model">school.student</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="search_view_id" ref="view_school_student_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add your first student!
+                </p>
+                <p>Register students, assign them to classes and period groups,
+                   and generate ID cards from here.</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

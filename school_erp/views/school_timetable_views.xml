@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Timetable list -->
+        <record id="view_school_timetable_list" model="ir.ui.view">
+            <field name="name">school.timetable.list</field>
+            <field name="model">school.timetable</field>
+            <field name="arch" type="xml">
+                <list string="Timetable" editable="bottom">
+                    <field name="class_id"/>
+                    <field name="day_of_week"/>
+                    <field name="period_id"/>
+                    <field name="time_start_display" readonly="1" string="Start"/>
+                    <field name="time_end_display" readonly="1" string="End"/>
+                    <field name="subject_id"/>
+                    <field name="teacher_id" optional="show"/>
+                    <field name="room" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Timetable search -->
+        <record id="view_school_timetable_search" model="ir.ui.view">
+            <field name="name">school.timetable.search</field>
+            <field name="model">school.timetable</field>
+            <field name="arch" type="xml">
+                <search string="Search Timetable">
+                    <field name="class_id"/>
+                    <field name="teacher_id"/>
+                    <field name="subject_id"/>
+                    <filter name="monday" string="Monday" domain="[('day_of_week','=','0')]"/>
+                    <filter name="tuesday" string="Tuesday" domain="[('day_of_week','=','1')]"/>
+                    <filter name="wednesday" string="Wednesday" domain="[('day_of_week','=','2')]"/>
+                    <filter name="thursday" string="Thursday" domain="[('day_of_week','=','3')]"/>
+                    <filter name="friday" string="Friday" domain="[('day_of_week','=','4')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="by_class" string="Class" context="{'group_by':'class_id'}"/>
+                        <filter name="by_day" string="Day" context="{'group_by':'day_of_week'}"/>
+                        <filter name="by_subject" string="Subject" context="{'group_by':'subject_id'}"/>
+                        <filter name="by_teacher" string="Teacher" context="{'group_by':'teacher_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_school_timetable" model="ir.actions.act_window">
+            <field name="name">Timetable</field>
+            <field name="res_model">school.timetable</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_school_timetable_search"/>
+        </record>
+
+    </data>
+</odoo>

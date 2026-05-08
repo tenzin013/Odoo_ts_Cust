@@ -1,0 +1,27 @@
+/* School ERP — backend styles */
+
+/* Timetable slot coloring in list views */
+.o_list_table .o_field_widget.o_field_text_color {
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+/* ID card state badges */
+.badge.text-bg-pending   { background-color: #FAEEDA !important; color: #854F0B !important; }
+.badge.text-bg-active    { background-color: #EAF3DE !important; color: #3B6D11 !important; }
+.badge.text-bg-lost      { background-color: #FCEBEB !important; color: #A32D2D !important; }
+.badge.text-bg-expired   { background-color: #F1EFE8 !important; color: #5F5E5A !important; }
+.badge.text-bg-cancelled { background-color: #F1EFE8 !important; color: #5F5E5A !important; }
+
+/* Student kanban avatar */
+.o_kanban_record .o_image_40_cover {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+}
+
+/* Highlight class teacher row */
+.o_list_table tr.o_data_row.teacher_row td {
+    background: #F3EFF5;
+}

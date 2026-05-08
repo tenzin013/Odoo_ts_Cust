@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences -->
+        <record id="seq_school_student" model="ir.sequence">
+            <field name="name">School Student Admission No.</field>
+            <field name="code">school.student</field>
+            <field name="prefix">ADM-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_school_idcard" model="ir.sequence">
+            <field name="name">School ID Card Number</field>
+            <field name="code">school.idcard</field>
+            <field name="prefix">IDC-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+
+    <data>
+
+        <!-- Grades -->
+        <record id="grade_1" model="school.grade">
+            <field name="name">Grade 1</field><field name="code">G1</field><field name="sequence">1</field>
+        </record>
+        <record id="grade_6" model="school.grade">
+            <field name="name">Grade 6</field><field name="code">G6</field><field name="sequence">6</field>
+        </record>
+        <record id="grade_9" model="school.grade">
+            <field name="name">Grade 9</field><field name="code">G9</field><field name="sequence">9</field>
+        </record>
+        <record id="grade_10" model="school.grade">
+            <field name="name">Grade 10</field><field name="code">G10</field><field name="sequence">10</field>
+        </record>
+        <record id="grade_11" model="school.grade">
+            <field name="name">Grade 11</field><field name="code">G11</field><field name="sequence">11</field>
+        </record>
+        <record id="grade_12" model="school.grade">
+            <field name="name">Grade 12</field><field name="code">G12</field><field name="sequence">12</field>
+        </record>
+
+        <!-- Subjects -->
+        <record id="subj_math" model="school.subject">
+            <field name="name">Mathematics</field><field name="code">MATH</field>
+            <field name="subject_type">core</field><field name="color">#534AB7</field>
+        </record>
+        <record id="subj_physics" model="school.subject">
+            <field name="name">Physics</field><field name="code">PHY</field>
+            <field name="subject_type">core</field><field name="color">#185FA5</field>
+        </record>
+        <record id="subj_chemistry" model="school.subject">
+            <field name="name">Chemistry</field><field name="code">CHEM</field>
+            <field name="subject_type">core</field><field name="color">#993C1D</field>
+        </record>
+        <record id="subj_biology" model="school.subject">
+            <field name="name">Biology</field><field name="code">BIO</field>
+            <field name="subject_type">core</field><field name="color">#0F6E56</field>
+        </record>
+        <record id="subj_english" model="school.subject">
+            <field name="name">English</field><field name="code">ENG</field>
+            <field name="subject_type">language</field><field name="color">#3B6D11</field>
+        </record>
+        <record id="subj_history" model="school.subject">
+            <field name="name">History &amp; Civics</field><field name="code">HIST</field>
+            <field name="subject_type">core</field><field name="color">#854F0B</field>
+        </record>
+        <record id="subj_cs" model="school.subject">
+            <field name="name">Computer Science</field><field name="code">CS</field>
+            <field name="subject_type">elective</field><field name="color">#993556</field>
+        </record>
+        <record id="subj_pe" model="school.subject">
+            <field name="name">Physical Education</field><field name="code">PE</field>
+            <field name="subject_type">activity</field><field name="color">#3B6D11</field>
+        </record>
+
+        <!-- Period Group A -->
+        <record id="period_group_a" model="school.period.group">
+            <field name="name">Group A</field><field name="code">GRP-A</field>
+        </record>
+
+        <!-- Periods for Group A (8 teaching periods + 2 breaks) -->
+        <record id="period_1" model="school.period">
+            <field name="name">Period 1</field><field name="sequence">1</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">8.0</field><field name="time_end">8.75</field>
+        </record>
+        <record id="period_2" model="school.period">
+            <field name="name">Period 2</field><field name="sequence">2</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">8.75</field><field name="time_end">9.5</field>
+        </record>
+        <record id="period_3" model="school.period">
+            <field name="name">Period 3</field><field name="sequence">3</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">9.5</field><field name="time_end">10.25</field>
+        </record>
+        <record id="break_1" model="school.period">
+            <field name="name">Short Break</field><field name="sequence">4</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">break</field>
+            <field name="time_start">10.25</field><field name="time_end">10.5</field>
+        </record>
+        <record id="period_4" model="school.period">
+            <field name="name">Period 4</field><field name="sequence">5</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">10.5</field><field name="time_end">11.25</field>
+        </record>
+        <record id="period_5" model="school.period">
+            <field name="name">Period 5</field><field name="sequence">6</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">11.25</field><field name="time_end">12.0</field>
+        </record>
+        <record id="lunch_break" model="school.period">
+            <field name="name">Lunch Break</field><field name="sequence">7</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">lunch</field>
+            <field name="time_start">12.0</field><field name="time_end">12.75</field>
+        </record>
+        <record id="period_6" model="school.period">
+            <field name="name">Period 6</field><field name="sequence">8</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">12.75</field><field name="time_end">13.5</field>
+        </record>
+        <record id="period_7" model="school.period">
+            <field name="name">Period 7</field><field name="sequence">9</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">13.5</field><field name="time_end">14.25</field>
+        </record>
+        <record id="period_8" model="school.period">
+            <field name="name">Period 8</field><field name="sequence">10</field>
+            <field name="group_id" ref="period_group_a"/>
+            <field name="period_type">regular</field>
+            <field name="time_start">14.25</field><field name="time_end">15.0</field>
+        </record>
+
+    </data>
+</odoo>

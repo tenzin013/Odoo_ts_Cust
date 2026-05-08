@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_student_idcard">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="student">
+                    <div class="page">
+                        <!-- ╔══════════════════════════════╗
+                             ║   STUDENT IDENTITY CARD      ║
+                             ╚══════════════════════════════╝ -->
+                        <div style="width:79.6mm; height:48mm; border:1px solid #714B67;
+                                    border-radius:4px; overflow:hidden; font-family:sans-serif;
+                                    page-break-after:always;">
+
+                            <!-- Header band -->
+                            <div style="background:#714B67; color:white; padding:4px 6px; text-align:center;">
+                                <div style="font-size:6pt; letter-spacing:.5px; opacity:.9;">
+                                    <!-- Replace with your school name -->
+                                    SPRINGDALE PUBLIC SCHOOL
+                                </div>
+                                <div style="font-size:7pt; font-weight:bold; margin:1px 0;">
+                                    STUDENT IDENTITY CARD
+                                </div>
+                            </div>
+
+                            <!-- Body -->
+                            <div style="display:flex; padding:4px 6px; gap:6px;">
+
+                                <!-- Photo -->
+                                <div style="flex-shrink:0;">
+                                    <t t-if="student.photo">
+                                        <img t-attf-src="data:image/png;base64,{{student.photo}}"
+                                             style="width:24mm; height:28mm; object-fit:cover;
+                                                    border:1px solid #714B67; border-radius:2px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div style="width:24mm; height:28mm; background:#EEEDFE;
+                                                    border:1px solid #714B67; border-radius:2px;
+                                                    display:flex; align-items:center; justify-content:center;
+                                                    font-size:14pt; font-weight:bold; color:#534AB7;">
+                                            <t t-esc="(student.name or ' ')[:2].upper()"/>
+                                        </div>
+                                    </t>
+                                </div>
+
+                                <!-- Info -->
+                                <div style="flex:1; font-size:6.5pt;">
+                                    <div style="font-size:8pt; font-weight:bold; color:#3D2B48; margin-bottom:3px;">
+                                        <t t-esc="student.name"/>
+                                    </div>
+                                    <div style="color:#666; margin-bottom:2px;">
+                                        Roll No: <b><t t-esc="student.roll_number or 'N/A'"/></b>
+                                    </div>
+
+                                    <table style="width:100%; border-collapse:collapse;">
+                                        <tr>
+                                            <td style="color:#888; padding:1px 0;">Class</td>
+                                            <td style="font-weight:500; padding:1px 0;">
+                                                <t t-esc="student.class_id.display_name or '–'"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="student.period_group_id">
+                                            <td style="color:#888; padding:1px 0;">Period Grp</td>
+                                            <td style="font-weight:500; padding:1px 0;">
+                                                <t t-esc="student.period_group_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="student.date_of_birth">
+                                            <td style="color:#888; padding:1px 0;">DOB</td>
+                                            <td style="font-weight:500; padding:1px 0;">
+                                                <t t-esc="student.date_of_birth.strftime('%d %b %Y')"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="student.blood_group">
+                                            <td style="color:#888; padding:1px 0;">Blood</td>
+                                            <td style="font-weight:500; color:#A32D2D; padding:1px 0;">
+                                                <t t-esc="student.blood_group"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="student.active_idcard_id">
+                                            <td style="color:#888; padding:1px 0;">Valid Till</td>
+                                            <td style="font-weight:500; padding:1px 0;">
+                                                <t t-esc="student.active_idcard_id.valid_till.strftime('%b %Y')
+                                                          if student.active_idcard_id.valid_till else '–'"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Barcode strip -->
+                            <div style="padding:2px 6px; border-top:0.5px solid #e0d8e8;">
+                                <t t-if="student.active_idcard_id">
+                                    <div t-attf-style="font-size:5.5pt; letter-spacing:1.5px;
+                                                       color:#555; text-align:center; font-family:monospace;">
+                                        <t t-esc="student.active_idcard_id.barcode"/>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <!-- Footer -->
+                            <div style="background:#F3EFF5; padding:2px 6px;
+                                        font-size:5pt; color:#714B67; text-align:center;">
+                                If found, please return to school administration.
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
