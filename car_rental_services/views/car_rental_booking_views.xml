@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- LIST -->
+    <record id="view_car_rental_booking_list" model="ir.ui.view">
+        <field name="name">car.rental.booking.list</field>
+        <field name="model">car.rental.booking</field>
+        <field name="arch" type="xml">
+            <list string="Bookings"
+                  decoration-success="state=='returned'"
+                  decoration-info="state=='ongoing'"
+                  decoration-warning="state=='confirmed'"
+                  decoration-muted="state=='cancelled'">
+                <field name="reference"/>
+                <field name="partner_id"/>
+                <field name="service_type_id"/>
+                <field name="vehicle_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="rental_days"/>
+                <field name="daily_rate" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="state" widget="badge"
+                       decoration-secondary="state=='draft'"
+                       decoration-warning="state=='confirmed'"
+                       decoration-info="state=='ongoing'"
+                       decoration-success="state=='returned'"
+                       decoration-danger="state=='cancelled'"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM -->
+    <record id="view_car_rental_booking_form" model="ir.ui.view">
+        <field name="name">car.rental.booking.form</field>
+        <field name="model">car.rental.booking</field>
+        <field name="arch" type="xml">
+            <form string="Booking">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start" type="object" string="Start Rental"
+                            class="btn-success" invisible="state != 'confirmed'"/>
+                    <button name="action_return" type="object" string="Mark Returned"
+                            class="btn-info" invisible="state != 'ongoing'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            class="btn-danger" invisible="state in ('returned','cancelled')"/>
+                    <button name="action_draft" type="object" string="Reset to Draft"
+                            class="btn-secondary" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,ongoing,returned"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="reference" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer &amp; Service">
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="service_type_id"/>
+                            <field name="vehicle_id"
+                                   domain="[('service_type_id','=',service_type_id),('state','in',['available','reserved'])]"/>
+                        </group>
+                        <group string="Rental Period">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="rental_days" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pricing">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="daily_rate" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                            <field name="security_deposit" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group string="Locations">
+                            <field name="pickup_location" placeholder="e.g. Airport Terminal 1"/>
+                            <field name="return_location" placeholder="e.g. City Centre Office"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2" placeholder="Additional notes or special requests..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- CALENDAR -->
+    <record id="view_car_rental_booking_calendar" model="ir.ui.view">
+        <field name="name">car.rental.booking.calendar</field>
+        <field name="model">car.rental.booking</field>
+        <field name="arch" type="xml">
+            <calendar string="Rental Calendar" date_start="date_from" date_stop="date_to"
+                      color="service_type_id" mode="month" quick_create="0">
+                <field name="partner_id"/>
+                <field name="service_type_id"/>
+                <field name="vehicle_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- SEARCH -->
+    <record id="view_car_rental_booking_search" model="ir.ui.view">
+        <field name="name">car.rental.booking.search</field>
+        <field name="model">car.rental.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference"/>
+                <field name="partner_id"/>
+                <field name="service_type_id"/>
+                <field name="vehicle_id"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="confirmed" string="Confirmed" domain="[('state','=','confirmed')]"/>
+                <filter name="ongoing" string="Ongoing" domain="[('state','=','ongoing')]"/>
+                <filter name="returned" string="Returned" domain="[('state','=','returned')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state','=','cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_service_type" string="Service Type" context="{'group_by': 'service_type_id'}"/>
+                    <filter name="group_partner" string="Customer" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'date_from:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_car_rental_booking" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">car.rental.booking</field>
+        <field name="view_mode">list,calendar,form</field>
+        <field name="search_view_id" ref="view_car_rental_booking_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first booking!</p>
+            <p>Manage customer reservations, track rental periods, and handle returns.</p>
+        </field>
+    </record>
+
+</odoo>

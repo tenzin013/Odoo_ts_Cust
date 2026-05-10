@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Booking Sequence -->
+        <record id="seq_car_rental_booking" model="ir.sequence">
+            <field name="name">Car Rental Booking</field>
+            <field name="code">car.rental.booking</field>
+            <field name="prefix">CRB/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Service Types -->
+        <record id="service_type_economy" model="car.rental.service.type">
+            <field name="name">Economy</field>
+            <field name="code">ECO</field>
+            <field name="sequence">10</field>
+            <field name="category">economy</field>
+            <field name="vehicle_class">b</field>
+            <field name="base_daily_rate">25.00</field>
+            <field name="weekend_rate">30.00</field>
+            <field name="weekly_rate">150.00</field>
+            <field name="monthly_rate">550.00</field>
+            <field name="security_deposit">200.00</field>
+            <field name="max_passengers">4</field>
+            <field name="free_km_per_day">200</field>
+            <field name="extra_km_charge">0.15</field>
+            <field name="includes_insurance">True</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="service_type_standard" model="car.rental.service.type">
+            <field name="name">Standard</field>
+            <field name="code">STD</field>
+            <field name="sequence">20</field>
+            <field name="category">standard</field>
+            <field name="vehicle_class">c</field>
+            <field name="base_daily_rate">45.00</field>
+            <field name="weekend_rate">55.00</field>
+            <field name="weekly_rate">280.00</field>
+            <field name="monthly_rate">950.00</field>
+            <field name="security_deposit">300.00</field>
+            <field name="max_passengers">5</field>
+            <field name="free_km_per_day">250</field>
+            <field name="extra_km_charge">0.18</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="service_type_premium" model="car.rental.service.type">
+            <field name="name">Premium</field>
+            <field name="code">PRE</field>
+            <field name="sequence">30</field>
+            <field name="category">premium</field>
+            <field name="vehicle_class">f</field>
+            <field name="base_daily_rate">90.00</field>
+            <field name="weekend_rate">110.00</field>
+            <field name="weekly_rate">550.00</field>
+            <field name="monthly_rate">1800.00</field>
+            <field name="security_deposit">500.00</field>
+            <field name="max_passengers">5</field>
+            <field name="free_km_per_day">300</field>
+            <field name="extra_km_charge">0.20</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="service_type_luxury" model="car.rental.service.type">
+            <field name="name">Luxury</field>
+            <field name="code">LUX</field>
+            <field name="sequence">40</field>
+            <field name="category">luxury</field>
+            <field name="vehicle_class">i</field>
+            <field name="base_daily_rate">200.00</field>
+            <field name="weekend_rate">250.00</field>
+            <field name="weekly_rate">1200.00</field>
+            <field name="monthly_rate">4000.00</field>
+            <field name="security_deposit">1000.00</field>
+            <field name="max_passengers">4</field>
+            <field name="free_km_per_day">400</field>
+            <field name="extra_km_charge">0.30</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">6</field>
+        </record>
+
+        <record id="service_type_suv" model="car.rental.service.type">
+            <field name="name">SUV / 4x4</field>
+            <field name="code">SUV</field>
+            <field name="sequence">50</field>
+            <field name="category">suv</field>
+            <field name="vehicle_class">g</field>
+            <field name="base_daily_rate">75.00</field>
+            <field name="weekend_rate">90.00</field>
+            <field name="weekly_rate">450.00</field>
+            <field name="monthly_rate">1500.00</field>
+            <field name="security_deposit">600.00</field>
+            <field name="max_passengers">7</field>
+            <field name="free_km_per_day">300</field>
+            <field name="extra_km_charge">0.22</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="service_type_chauffeur" model="car.rental.service.type">
+            <field name="name">Chauffeur Driven</field>
+            <field name="code">CHF</field>
+            <field name="sequence">60</field>
+            <field name="category">chauffeur</field>
+            <field name="vehicle_class">i</field>
+            <field name="base_daily_rate">350.00</field>
+            <field name="weekend_rate">400.00</field>
+            <field name="security_deposit">500.00</field>
+            <field name="max_passengers">4</field>
+            <field name="free_km_per_day">300</field>
+            <field name="extra_km_charge">0.40</field>
+            <field name="includes_driver">True</field>
+            <field name="includes_fuel">True</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">5</field>
+        </record>
+
+        <record id="service_type_electric" model="car.rental.service.type">
+            <field name="name">Electric / Hybrid</field>
+            <field name="code">EV</field>
+            <field name="sequence">70</field>
+            <field name="category">electric</field>
+            <field name="vehicle_class">c</field>
+            <field name="base_daily_rate">60.00</field>
+            <field name="weekend_rate">72.00</field>
+            <field name="weekly_rate">360.00</field>
+            <field name="monthly_rate">1200.00</field>
+            <field name="security_deposit">400.00</field>
+            <field name="max_passengers">5</field>
+            <field name="free_km_per_day">250</field>
+            <field name="extra_km_charge">0.18</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="color">10</field>
+        </record>
+
+        <record id="service_type_van" model="car.rental.service.type">
+            <field name="name">Van / Minibus</field>
+            <field name="code">VAN</field>
+            <field name="sequence">80</field>
+            <field name="category">van</field>
+            <field name="vehicle_class">h</field>
+            <field name="base_daily_rate">85.00</field>
+            <field name="weekend_rate">100.00</field>
+            <field name="weekly_rate">500.00</field>
+            <field name="monthly_rate">1700.00</field>
+            <field name="security_deposit">700.00</field>
+            <field name="max_passengers">12</field>
+            <field name="free_km_per_day">300</field>
+            <field name="extra_km_charge">0.25</field>
+            <field name="includes_insurance">True</field>
+            <field name="includes_gps">True</field>
+            <field name="includes_child_seat">True</field>
+            <field name="color">7</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- LIST -->
+    <record id="view_car_rental_vehicle_list" model="ir.ui.view">
+        <field name="name">car.rental.vehicle.list</field>
+        <field name="model">car.rental.vehicle</field>
+        <field name="arch" type="xml">
+            <list string="Vehicles" decoration-muted="state == 'inactive'">
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="brand"/>
+                <field name="model_year"/>
+                <field name="service_type_id"/>
+                <field name="fuel_type"/>
+                <field name="transmission"/>
+                <field name="seats"/>
+                <field name="odometer"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='available'"
+                       decoration-warning="state=='reserved'"
+                       decoration-danger="state=='maintenance'"
+                       decoration-info="state=='rented'"
+                       decoration-muted="state=='inactive'"/>
+                <button name="action_set_available" type="object" string="Set Available"
+                        icon="fa-check" invisible="state == 'available'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM -->
+    <record id="view_car_rental_vehicle_form" model="ir.ui.view">
+        <field name="name">car.rental.vehicle.form</field>
+        <field name="model">car.rental.vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle">
+                <header>
+                    <button name="action_set_available" type="object" string="Set Available"
+                            class="btn-success" invisible="state == 'available'"/>
+                    <button name="action_set_maintenance" type="object" string="Send to Maintenance"
+                            class="btn-warning" invisible="state == 'maintenance'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="available,reserved,rented,maintenance"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_bookings" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="booking_count" widget="statinfo" string="Bookings"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Vehicle Name / Model"/></h1>
+                        <h3 class="text-muted"><field name="license_plate" placeholder="License Plate"/></h3>
+                    </div>
+                    <group>
+                        <group string="Vehicle Info">
+                            <field name="service_type_id"/>
+                            <field name="brand"/>
+                            <field name="model_year"/>
+                            <field name="color"/>
+                            <field name="vin"/>
+                            <field name="seats"/>
+                        </group>
+                        <group string="Technical">
+                            <field name="fuel_type"/>
+                            <field name="transmission"/>
+                            <field name="odometer"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pricing">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="purchase_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="daily_rate_override" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group string="Compliance">
+                            <field name="insurance_expiry"/>
+                            <field name="registration_expiry"/>
+                            <field name="last_service_date"/>
+                            <field name="next_service_km"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" colspan="2" nolabel="1" placeholder="Internal notes..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- KANBAN -->
+    <record id="view_car_rental_vehicle_kanban" model="ir.ui.view">
+        <field name="name">car.rental.vehicle.kanban</field>
+        <field name="model">car.rental.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban sample="1" group_by="state">
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="brand"/>
+                <field name="service_type_id"/>
+                <field name="state"/>
+                <field name="fuel_type"/>
+                <field name="seats"/>
+                <templates>
+                    <t t-name="card">
+                        <main>
+                            <strong><field name="name"/></strong>
+                            <div class="text-muted small"><field name="license_plate"/></div>
+                            <div><field name="service_type_id"/></div>
+                            <div class="mt-1">
+                                <span class="badge bg-secondary"><field name="fuel_type"/></span>
+                                <span class="badge bg-secondary ms-1"><i class="fa fa-users"/> <field name="seats"/></span>
+                            </div>
+                        </main>
+                        <footer>
+                            <field name="state" widget="badge"
+                                   decoration-success="state=='available'"
+                                   decoration-warning="state=='reserved'"
+                                   decoration-danger="state=='maintenance'"
+                                   decoration-info="state=='rented'"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- SEARCH -->
+    <record id="view_car_rental_vehicle_search" model="ir.ui.view">
+        <field name="name">car.rental.vehicle.search</field>
+        <field name="model">car.rental.vehicle</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="service_type_id"/>
+                <field name="brand"/>
+                <filter name="available" string="Available" domain="[('state','=','available')]"/>
+                <filter name="rented" string="Rented" domain="[('state','=','rented')]"/>
+                <filter name="maintenance" string="In Maintenance" domain="[('state','=','maintenance')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_service_type" string="Service Type" context="{'group_by': 'service_type_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_fuel" string="Fuel Type" context="{'group_by': 'fuel_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_car_rental_vehicle" model="ir.actions.act_window">
+        <field name="name">Fleet</field>
+        <field name="res_model">car.rental.vehicle</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_car_rental_vehicle_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first vehicle!</p>
+            <p>Manage your rental fleet, track availability, and monitor maintenance schedules.</p>
+        </field>
+    </record>
+
+</odoo>

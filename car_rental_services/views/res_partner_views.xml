@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add rental history smart button to customer form -->
+    <record id="view_partner_car_rental_inherit" model="ir.ui.view">
+        <field name="name">res.partner.car.rental.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="action"
+                        name="%(car_rental_services.action_car_rental_booking)d"
+                        icon="fa-car"
+                        context="{'search_default_partner_id': active_id}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Rentals</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

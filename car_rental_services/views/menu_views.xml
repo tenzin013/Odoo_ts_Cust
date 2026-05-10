@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ROOT MENU -->
+    <menuitem id="menu_car_rental_root"
+              name="Car Rental"
+              sequence="50"
+              web_icon="car_rental_services,static/description/icon.png"/>
+
+    <!-- BOOKINGS -->
+    <menuitem id="menu_car_rental_bookings_main"
+              name="Bookings"
+              parent="menu_car_rental_root"
+              sequence="10"/>
+
+    <menuitem id="menu_car_rental_booking"
+              name="All Bookings"
+              parent="menu_car_rental_bookings_main"
+              action="action_car_rental_booking"
+              sequence="10"/>
+
+    <!-- FLEET -->
+    <menuitem id="menu_car_rental_fleet_main"
+              name="Fleet"
+              parent="menu_car_rental_root"
+              sequence="20"/>
+
+    <menuitem id="menu_car_rental_vehicle"
+              name="Vehicles"
+              parent="menu_car_rental_fleet_main"
+              action="action_car_rental_vehicle"
+              sequence="10"/>
+
+    <!-- CONFIGURATION -->
+    <menuitem id="menu_car_rental_config"
+              name="Configuration"
+              parent="menu_car_rental_root"
+              sequence="90"/>
+
+    <menuitem id="menu_car_rental_service_type"
+              name="Service Types"
+              parent="menu_car_rental_config"
+              action="action_car_rental_service_type"
+              sequence="10"/>
+
+</odoo>
