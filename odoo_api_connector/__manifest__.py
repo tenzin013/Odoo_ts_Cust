@@ -14,9 +14,12 @@ Features:
 - Scheduled synchronization support
         ''',
         'category': 'Tools',
-        'author': 'OpenAI',
-        'website': 'https://www.odoo.com',
-        'license': 'LGPL-3',
+        ''author': 'Tshering Sherpa',
+    'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
+    'maintainer': 'Tshering Sherpa',
+    'support': 'tsherings8981@gmail.com',
+    'price':'51.13',
+    'currency':'USD',
         'depends': ['base'],
         'data': [
             'security/ir.model.access.csv',
