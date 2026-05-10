@@ -17,8 +17,8 @@ Features:
         ''author': 'Tshering Sherpa',
     'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
     'maintainer': 'Tshering Sherpa',
-    'support': 'tsherings8981@gmail.com',
-    'price':'51.13',
+    
+    'price':'31.13',
     'currency':'USD',
         'depends': ['base'],
         'data': [
