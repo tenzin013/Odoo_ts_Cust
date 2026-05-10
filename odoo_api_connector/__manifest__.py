@@ -17,7 +17,7 @@ Features:
         'author': 'Tshering Sherpa',
     'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
     'maintainer': 'Tshering Sherpa',
-    
+    'license': 'LGPL-3',
     'price':'31.13',
     'currency':'USD',
         'depends': ['base'],
@@ -26,6 +26,8 @@ Features:
             'views/api_connector_views.xml',
             'views/field_mapping_views.xml',
             'views/menu_views.xml',
+                'images': [
+        'static/description/banner.png',
         ],
         'installable': True,
         'application': True,
