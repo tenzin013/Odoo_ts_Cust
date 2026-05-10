@@ -29,7 +29,7 @@ Features:
                 
         ],
         'images': [
-        'static/description/banner.png'
+        'static/description/banner.png'],
         'installable': True,
         'application': True,
     }
