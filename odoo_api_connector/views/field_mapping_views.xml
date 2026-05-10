@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_field_mapping_tree" model="ir.ui.view">
+        <field name="name">api.field.mapping.tree</field>
+        <field name="model">api.field.mapping</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="connector_id"/>
+                <field name="api_field"/>
+                <field name="odoo_field"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

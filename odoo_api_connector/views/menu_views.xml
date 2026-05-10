@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_api_connector_root"
+              name="API Integration"
+              sequence="10"/>
+
+    <menuitem id="menu_api_connector"
+              name="API Connectors"
+              parent="menu_api_connector_root"
+              action="action_api_connector"/>
+</odoo>

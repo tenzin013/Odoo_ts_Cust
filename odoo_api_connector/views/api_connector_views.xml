@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_api_connector_tree" model="ir.ui.view">
+        <field name="name">api.connector.tree</field>
+        <field name="model">api.connector</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="base_url"/>
+                <field name="auth_type"/>
+                <field name="target_model_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_api_connector_form" model="ir.ui.view">
+        <field name="name">api.connector.form</field>
+        <field name="model">api.connector</field>
+        <field name="arch" type="xml">
+            <form string="API Connector">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="base_url"/>
+                        <field name="auth_type"/>
+                        <field name="api_key" password="True"/>
+                        <field name="http_method"/>
+                        <field name="target_model_id"/>
+                        <field name="active"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Field Mapping">
+                            <field name="field_mapping_ids">
+                                <tree editable="bottom">
+                                    <field name="api_field"/>
+                                    <field name="odoo_field"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button name="action_test_connection"
+                                type="object"
+                                string="Test Connection"
+                                class="btn-primary"/>
+
+                        <button name="action_import_data"
+                                type="object"
+                                string="Import Data"
+                                class="btn-success"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_api_connector" model="ir.actions.act_window">
+        <field name="name">API Connectors</field>
+        <field name="res_model">api.connector</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
