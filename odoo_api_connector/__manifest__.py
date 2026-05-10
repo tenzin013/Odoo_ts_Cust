@@ -14,7 +14,7 @@ Features:
 - Scheduled synchronization support
         ''',
         'category': 'Tools',
-        ''author': 'Tshering Sherpa',
+        'author': 'Tshering Sherpa',
     'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
     'maintainer': 'Tshering Sherpa',
     
