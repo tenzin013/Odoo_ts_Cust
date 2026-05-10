@@ -27,7 +27,7 @@ Features:
             'views/field_mapping_views.xml',
             'views/menu_views.xml',
                 'images': [
-        'static/description/banner.png',
+        'static/description/banner.png'
         ],
         'installable': True,
         'application': True,
