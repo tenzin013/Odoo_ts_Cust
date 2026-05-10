@@ -20,8 +20,12 @@ A comprehensive Car Rental Management solution that allows you to:
 
 Perfect for car rental agencies, corporate fleets, and vehicle leasing businesses.
     """,
-    'author': 'Car Rental Solutions',
-    'website': 'https://www.odoo.com',
+    'author': 'Tshering Sherpa',
+    'website': 'https://www.linkedin.com/in/tshering-sherpa-a17184278/',
+    'maintainer': 'Tshering Sherpa',
+    'support': 'tsherings8981@gmail.com',
+    'price':'51.13',
+    'currency':'USD',
     'license': 'LGPL-3',
     'depends': [
         'base',
