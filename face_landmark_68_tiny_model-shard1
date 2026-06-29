@@ -22,9 +22,10 @@
     const SCAN_WIDTH        = 640;
     const SCAN_HEIGHT       = 480;
 
-    // face-api.js CDN (loaded via kiosk template <script> tag)
-    const FACEAPI_CDN = "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";
-    const MODELS_URL  = "/hr_attendance_face_detection/static/models";
+    // face-api.js: try local static file first (works offline), fall back to CDN
+    const FACEAPI_LOCAL = "/hr_attendance_face_detection/static/src/js/face-api.min.js";
+    const FACEAPI_CDN   = "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";
+    const MODELS_URL    = "/hr_attendance_face_detection/static/models";
 
     // ── DOM references ────────────────────────────────────────────────────────
     const app         = document.getElementById("face_kiosk_app");
@@ -66,17 +67,29 @@
         if (loadingOverlay) loadingOverlay.classList.add("hidden");
     }
 
-    // ── Load face-api.js from CDN then load models ────────────────────────────
-    async function loadFaceApi() {
-        setLoadingMessage("Loading face recognition library…");
-        await new Promise((resolve, reject) => {
-            if (window.faceapi) return resolve();
+    // ── Load face-api.js (local first, CDN fallback) ──────────────────────────
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
             const s = document.createElement("script");
-            s.src = FACEAPI_CDN;
+            s.src = src + "?v=20260611";   // cache-bust
             s.onload = resolve;
-            s.onerror = () => reject(new Error("Failed to load face-api.js from CDN"));
+            s.onerror = reject;
             document.head.appendChild(s);
         });
+    }
+
+    async function loadFaceApi() {
+        setLoadingMessage("Loading face recognition library…");
+        // face-api.js is loaded via a <script> tag in kiosk_templates.xml before
+        // this file. If it failed to load (e.g. no internet), throw a clear error.
+        if (!window.faceapi) {
+            throw new Error(
+                "faceapi is not defined. " +
+                "The face-api.js library failed to load from CDN. " +
+                "Please ensure the kiosk has internet access, or host " +
+                "face-api.min.js locally and update the <script> src in kiosk_templates.xml."
+            );
+        }
 
         setLoadingMessage("Loading AI models…");
         await Promise.all([
@@ -312,34 +325,103 @@
         showIdle("Position your face in the oval", "Face recognition will start automatically");
     }
 
+    // ── DEBUG panel (shows raw server response for diagnosis) ─────────────────
+    function showDebugPanel(url, status, contentType, rawText) {
+        let panel = document.getElementById("_face_debug_panel");
+        if (!panel) {
+            panel = document.createElement("div");
+            panel.id = "_face_debug_panel";
+            panel.style.cssText = [
+                "position:fixed", "bottom:0", "left:0", "right:0", "z-index:99999",
+                "background:#1a1a2e", "color:#e0e0e0", "font:12px/1.5 monospace",
+                "padding:12px 16px", "max-height:55vh", "overflow-y:auto",
+                "border-top:3px solid #e74c3c", "white-space:pre-wrap", "word-break:break-all",
+            ].join(";");
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "✕ Close Debug";
+            closeBtn.style.cssText = "float:right;background:#e74c3c;color:#fff;border:none;padding:4px 10px;cursor:pointer;border-radius:4px;font-size:12px;margin-bottom:6px";
+            closeBtn.onclick = () => panel.remove();
+            panel.appendChild(closeBtn);
+            document.body.appendChild(panel);
+        }
+
+        // Strip HTML tags to get plain traceback text
+        const plain = rawText
+            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+            .replace(/<[^>]+>/g, " ")
+            .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
+            .replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+
+        panel.innerHTML = "";
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "✕ Close Debug";
+        closeBtn.style.cssText = "float:right;background:#e74c3c;color:#fff;border:none;padding:4px 10px;cursor:pointer;border-radius:4px;font-size:12px";
+        closeBtn.onclick = () => panel.remove();
+        panel.appendChild(closeBtn);
+
+        const header = document.createElement("div");
+        header.style.cssText = "color:#f39c12;font-weight:bold;margin-bottom:8px;font-size:13px";
+        header.textContent = `🔴 DEBUG — ${url}  |  HTTP ${status}  |  Content-Type: ${contentType}`;
+        panel.appendChild(header);
+
+        const pre = document.createElement("pre");
+        pre.style.cssText = "margin:0;color:#ecf0f1;font-size:11px";
+        pre.textContent = plain.slice(0, 8000) + (plain.length > 8000 ? "\n\n[... truncated ...]" : "");
+        panel.appendChild(pre);
+
+        // Also log full raw HTML to console for copy-paste
+        console.error("=== FACE KIOSK DEBUG ===\nURL:", url, "\nHTTP:", status, "\nContent-Type:", contentType);
+        console.error("RAW RESPONSE:\n", rawText);
+    }
+
     // ── JSON-RPC helper ────────────────────────────────────────────────────────
     async function rpcCall(url, params) {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-            },
-            body: JSON.stringify({ jsonrpc: "2.0", method: "call", id: Date.now(), params }),
-        });
+        let response;
+        try {
+            response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: JSON.stringify({ jsonrpc: "2.0", method: "call", id: Date.now(), params }),
+            });
+        } catch (networkErr) {
+            throw new Error("Network error calling " + url + ": " + networkErr.message);
+        }
 
-        // Guard: if Odoo returned HTML (login redirect / 404 / error page)
-        // instead of JSON, surface a useful message rather than a parse crash.
         const contentType = response.headers.get("content-type") || "";
+        const rawText = await response.text();
+
+        // Not JSON → show full debug panel with actual server response/traceback
         if (!contentType.includes("application/json")) {
-            const text = await response.text();
-            const preview = text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200);
+            showDebugPanel(url, response.status, contentType, rawText);
             throw new Error(
-                `Server returned HTTP ${response.status} (${response.statusText}) — not JSON.\n` +
-                `URL: ${url}\nResponse preview: ${preview}`
+                `HTTP ${response.status} — server returned ${contentType || "unknown content"} instead of JSON.\n` +
+                `See the DEBUG panel at the bottom of the screen for the full traceback.`
             );
         }
 
-        const json = await response.json();
+        let json;
+        try {
+            json = JSON.parse(rawText);
+        } catch (parseErr) {
+            showDebugPanel(url, response.status, contentType, rawText);
+            throw new Error("JSON parse failed even though Content-Type was JSON. See debug panel.");
+        }
+
         if (json.error) {
-            const msg = json.error.data?.message || json.error.message || JSON.stringify(json.error);
+            // Odoo JSON-RPC error — extract the Python traceback if present
+            const data = json.error.data || {};
+            const traceback = data.debug || data.traceback || "";
+            const msg = data.message || json.error.message || JSON.stringify(json.error);
+            if (traceback) {
+                showDebugPanel(url, response.status, "application/json — Odoo error", traceback);
+            }
             throw new Error(msg);
         }
+
         return json.result;
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Odoo 18: res.config.settings uses a flat <form> with no sheet/div wrapper.
+        We simply append our block at the end of the form using position="inside".
+        Each module's settings block is a <div class="app_settings_block">.
+    -->
+    <record id="res_config_settings_view_form_face" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.face.detection</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="25"/>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Face Attendance" name="hr_attendance_face_detection"
+                     string="Face Attendance" groups="hr_attendance.group_hr_attendance_manager">
+                    <setting string="Enable Face Recognition"
+                             help="Allow employees to check in/out using facial recognition.">
+                        <field name="face_attendance_enabled"/>
+                    </setting>
+                    <setting string="Require GPS Geofencing"
+                             help="Only allow check-ins from within configured location radius.">
+                        <field name="face_attendance_geofencing"/>
+                    </setting>
+                    <setting string="Save Face Snapshots"
+                             help="Store webcam snapshots with attendance records for audit.">
+                        <field name="face_attendance_save_snapshot"/>
+                    </setting>
+                    <setting string="Kiosk Mode"
+                             help="Enable shared kiosk terminal at /hr_attendance_face/kiosk">
+                        <field name="face_attendance_kiosk_mode"/>
+                    </setting>
+                    <setting string="Recognition Tolerance"
+                             help="Lower = stricter (0.40–0.65 recommended). Default: 0.55">
+                        <field name="face_attendance_threshold"/>
+                    </setting>
+                    <setting string="Auto Check-Out at Midnight"
+                             help="Automatically close any open attendance records at midnight.">
+                        <field name="face_attendance_auto_checkout"/>
+                    </setting>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
