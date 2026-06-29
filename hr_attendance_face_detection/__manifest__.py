@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'HR Attendance Face Detection',
+    'name': 'TS Attendance Face Detection',
     'version': '18.0.2.0.1',
     'category': 'Human Resources/Attendances',
     'summary': 'Face Recognition Attendance with GPS Geofencing for Odoo 18 Community',
